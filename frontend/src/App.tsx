@@ -106,7 +106,14 @@ const App = () => {
                       className="bg-transparent rounded-lg size-5"
                     />
                   </div>
-                  <p className="text-sm font-bold ">Full Time</p>
+                  <p
+                    className={clsx(
+                      "text-sm font-bold ",
+                      darkMode ? "text-white" : ""
+                    )}
+                  >
+                    Full Time
+                  </p>
                 </div>
                 <Button className="w-full h-12 hover:bg-[#5964e0] hover:scale-110 text-sm bg-[#5964e0] font-normal">
                   Search

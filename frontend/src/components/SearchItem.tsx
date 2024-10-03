@@ -43,7 +43,12 @@ const SearchItem = ({ openModal, setOpenModal }: Props) => {
             <SearchIcon className="size-24" />
           </Button>
         </div>
-        <div className="h-full w-[1.4px] xl:block md:block lg:block hidden bg-slate-200 absolute xl:left-[450px] lg:left-[400px] md:left-[280px]"></div>
+        <div
+          className={clsx(
+            "h-full w-[1.4px] xl:block md:block lg:block hidden  absolute xl:left-[450px] lg:left-[400px] md:left-[280px]",
+            darkMode ? "bg-slate-500" : "bg-slate-200"
+          )}
+        ></div>
         <div className="hidden xl:block md:block lg:block">
           <div className="flex items-center space-x-4 px-2">
             <img src="desktop/icon-location.svg" alt="" />
@@ -57,7 +62,12 @@ const SearchItem = ({ openModal, setOpenModal }: Props) => {
             />
           </div>
         </div>
-        <div className=" xl:block md:block lg:block hidden h-full w-[1.4px] bg-slate-200 xl:left-[765px] lg:left-[670px] md:left-[490px] absolute"></div>
+        <div
+          className={clsx(
+            " xl:block md:block lg:block hidden h-full w-[1.4px] bg-slate-200 xl:left-[765px] lg:left-[670px] md:left-[490px] absolute",
+            darkMode ? "bg-slate-500" : "bg-slate-200"
+          )}
+        ></div>
         <div className="hidden xl:block md:block lg:block min-w-full">
           <div className=" w-[100%]">
             <div className="flex items-center lg:space-x-6 space-x-1 w-full">

@@ -15,7 +15,7 @@ const Title = () => {
           <span
             className={clsx(
               "text-2xl text-white font-semibold",
-              darkMode ? "text-slate-800" : ""
+              darkMode ? "text-slate-700" : ""
             )}
           >
             devjobs
@@ -27,7 +27,7 @@ const Title = () => {
             onClick={handleDarkMode}
             className={clsx(
               "bg-slate-50 cursor-pointer w-12 h-6 rounded-full flex items-center p-1",
-              darkMode ? "bg-purple-500" : ""
+              darkMode ? "bg-slate-400" : ""
             )}
           >
             <div
