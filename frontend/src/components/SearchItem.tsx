@@ -1,14 +1,23 @@
 import { SearchIcon } from "lucide-react";
 import { Button } from "./ui/button";
+import { useContext } from "react";
+import { DarkModeContext } from "@/contexts/DarkModeContext";
+import clsx from "clsx";
 
 interface Props {
   setOpenModal: (open: boolean) => void;
   openModal: boolean;
 }
 const SearchItem = ({ openModal, setOpenModal }: Props) => {
+  const { darkMode } = useContext(DarkModeContext);
   return (
     <div className="md:pt-3 pt-5 relative">
-      <div className="w-full rounded-lg bg-white h-[70px] items-center grid grid-cols-1 xl:grid-cols-[1.5fr,1fr,1fr] lg:grid-cols-[1.5fr,1fr,1fr] md:grid-cols-[1.5fr,1fr,1fr] py-3 px-3 relative">
+      <div
+        className={clsx(
+          "w-full rounded-lg h-[70px] items-center grid grid-cols-1 xl:grid-cols-[1.5fr,1fr,1fr] lg:grid-cols-[1.5fr,1fr,1fr] md:grid-cols-[1.5fr,1fr,1fr] py-3 px-3 relative",
+          darkMode ? "bg-slate-800" : "bg-white"
+        )}
+      >
         <div className="flex items-center space-x-3">
           <img
             src="desktop/icon-search.svg"
@@ -17,7 +26,10 @@ const SearchItem = ({ openModal, setOpenModal }: Props) => {
           />
           <input
             type="text"
-            className="md:placeholder:text-sm placeholder:text-xs placeholder:text-slate-400 w-[70%] xl:w-[70%] lg:w-[90%] md:w-[90%] h-[39px] outline-none p-2"
+            className={clsx(
+              "md:placeholder:text-sm placeholder:text-xs placeholder:text-slate-400 w-[70%] xl:w-[70%] lg:w-[90%] md:w-[90%] h-[39px] outline-none p-2",
+              darkMode ? "bg-slate-800" : ""
+            )}
             placeholder="Filter by title, companies, expertise..."
           />
           <div onClick={() => setOpenModal(!openModal)}>
@@ -37,7 +49,10 @@ const SearchItem = ({ openModal, setOpenModal }: Props) => {
             <img src="desktop/icon-location.svg" alt="" />
             <input
               type="text"
-              className="placeholder:text-sm  placeholder:text-slate-400 h-[39px] outline-none p-2"
+              className={clsx(
+                "placeholder:text-sm  placeholder:text-slate-400 h-[39px] outline-none p-2",
+                darkMode ? "bg-slate-800" : ""
+              )}
               placeholder="Filter by location..."
             />
           </div>
@@ -48,7 +63,14 @@ const SearchItem = ({ openModal, setOpenModal }: Props) => {
             <div className="flex items-center lg:space-x-6 space-x-1 w-full">
               <div className="flex items-center space-x-3 xl:space-x-4 xl:px-6 w-[100%]">
                 <input type="checkbox" className=" cursor-pointer size-5" />
-                <p className="text-sm font-semibold lg:block xl:block md:hidden hidden">Full Time Only</p>
+                <p
+                  className={clsx(
+                    "text-sm font-semibold lg:block xl:block md:hidden hidden",
+                    darkMode ? "text-white" : ""
+                  )}
+                >
+                  Full Time Only
+                </p>
                 <p className="text-sm font-semibold lg:hidden">Full Time</p>
               </div>
               <Button className="xl:w-40 hover:bg-[#7880dd] hover:scale-110 text-sm bg-[#5964e0] font-normal">

@@ -3,19 +3,27 @@ import Card from "./components/Card";
 import SearchItem from "./components/SearchItem";
 import Title from "./components/Title";
 import Modal from "./components/Modal";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Button } from "./components/ui/button";
+import { DarkModeContext } from "./contexts/DarkModeContext";
+import clsx from "clsx";
 
 const App = () => {
   const [toggleModal, setToggleModal] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+  const { darkMode } = useContext(DarkModeContext);
 
   const handleToggleModal = () => {
     setToggleModal(!toggleModal);
   };
 
   return (
-    <main className="bg-slate-100 xl:bg-[url(desktop/bg-pattern-header.svg)] lg:bg-[url(desktop/bg-pattern-header.svg)] md:bg-[url(tablet/bg-pattern-header.svg)] bg-[url(tablet/bg-pattern-header.svg)] bg-no-repeat w-full min-h-screen xl:px-32 md:px-6 px-4 mx-auto xl:py-6 md:py-6 py-6 relative">
+    <main
+      className={clsx(
+        " xl:bg-[url(desktop/bg-pattern-header.svg)] lg:bg-[url(desktop/bg-pattern-header.svg)] md:bg-[url(tablet/bg-pattern-header.svg)] bg-[url(tablet/bg-pattern-header.svg)] bg-no-repeat w-full min-h-screen xl:px-32 md:px-6 px-4 mx-auto xl:py-6 md:py-6 py-6 relative",
+        darkMode ? "bg-slate-700" : "bg-slate-100"
+      )}
+    >
       <div className=" w-full space-y-8 md:py-6 py-4">
         <div>
           <Title />
@@ -25,9 +33,17 @@ const App = () => {
         </div>
         <div
           onClick={handleToggleModal}
-          className="bg-white size-14 cursor-pointer rounded-lg flex items-center justify-center"
+          className={clsx(
+            "size-14 cursor-pointer rounded-lg flex items-center justify-center",
+            darkMode ? "bg-slate-500 shadow-md" : "bg-white"
+          )}
         >
-          <div className="size-8 rounded-full bg-rose-300 flex items-center justify-center">
+          <div
+            className={clsx(
+              "size-8 rounded-full  flex items-center justify-center",
+              darkMode ? "bg-purple-400" : "bg-rose-300"
+            )}
+          >
             <Plus className="text-white" />
           </div>
         </div>
@@ -50,8 +66,19 @@ const App = () => {
         >
           <Modal>
             <h1>
-              Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Dicta quisquam laudantium, fugiat aut ullam totam nemo officiis eveniet! Laborum veniam aliquam aliquid iusto nulla, totam iure omnis magni asperiores quis soluta vero, dignissimos repudiandae necessitatibus in maxime iste velit tempore fuga sint sapiente eos explicabo voluptate corporis. Rem neque ducimus eligendi soluta. Consectetur ea qui unde impedit aliquam facilis soluta, incidunt repellendus sapiente nihil placeat ab iste magni perferendis et cum, quia fugiat consequatur provident neque distinctio corrupti voluptatum porro! Sequi odio libero beatae? Fuga possimus quod, alias ex, aut facere eligendi iusto non enim consectetur impedit corrupti labore sequi!
+              Lorem ipsum dolor, sit amet consectetur adipisicing elit. Lorem
+              ipsum, dolor sit amet consectetur adipisicing elit. Dicta quisquam
+              laudantium, fugiat aut ullam totam nemo officiis eveniet! Laborum
+              veniam aliquam aliquid iusto nulla, totam iure omnis magni
+              asperiores quis soluta vero, dignissimos repudiandae
+              necessitatibus in maxime iste velit tempore fuga sint sapiente eos
+              explicabo voluptate corporis. Rem neque ducimus eligendi soluta.
+              Consectetur ea qui unde impedit aliquam facilis soluta, incidunt
+              repellendus sapiente nihil placeat ab iste magni perferendis et
+              cum, quia fugiat consequatur provident neque distinctio corrupti
+              voluptatum porro! Sequi odio libero beatae? Fuga possimus quod,
+              alias ex, aut facere eligendi iusto non enim consectetur impedit
+              corrupti labore sequi!
             </h1>
           </Modal>
         </div>
