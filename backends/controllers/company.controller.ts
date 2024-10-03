@@ -15,7 +15,17 @@ export const createCompany: RequestHandler = async (req, res, next) => {
 };
 export const getAllCompany: RequestHandler = async (req, res, next) => {
   try {
-    const company = await prisma.company.findMany({});
+    const company = await prisma.company.findMany({
+      select: {
+        name: true,
+        website: true,
+        jobs: {
+          select: {
+            image: true,
+          },
+        },
+      },
+    });
     res.status(200).json(company);
   } catch (error) {
     res.status(500).json(error);
