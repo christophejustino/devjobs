@@ -1,4 +1,4 @@
-import { DarkModeContext } from "@/contexts/DarkModeContext";
+import { DarkModeContext } from "@/context/DarkModeContext";
 import clsx from "clsx";
 import { useContext, useState } from "react";
 

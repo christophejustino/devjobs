@@ -5,7 +5,7 @@ import Title from "./components/Title";
 import Modal from "./components/Modal";
 import { useContext, useState } from "react";
 import { Button } from "./components/ui/button";
-import { DarkModeContext } from "./contexts/DarkModeContext";
+import { DarkModeContext } from "./context/DarkModeContext";
 import clsx from "clsx";
 
 const App = () => {

@@ -1,7 +1,7 @@
 import { SearchIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import { useContext } from "react";
-import { DarkModeContext } from "@/contexts/DarkModeContext";
+import { DarkModeContext } from "@/context/DarkModeContext";
 import clsx from "clsx";
 
 interface Props {
