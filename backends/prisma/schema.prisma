@@ -22,7 +22,7 @@ model Job {
   image            String
   location         Location @relation(fields: [locationId], references: [locationId])
   locationId       String
-  postedDate       DateTime
+  postedDate       DateTime @default(now())
   company          Company  @relation(fields: [companyId], references: [companyId])
   companyId        String
   requirements     String[]

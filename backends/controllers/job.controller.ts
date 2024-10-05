@@ -15,7 +15,20 @@ export const createJob: RequestHandler = async (req, res, next) => {
 };
 export const getAllJob: RequestHandler = async (req, res, next) => {
   try {
-    const result = await prisma.job.findMany({});
+    const result = await prisma.job.findMany({
+      include: {
+        company: {
+          select: {
+            name: true,
+          },
+        },
+        location: {
+          select: {
+            country: true,
+          },
+        },
+      },
+    });
     res.status(200).json(result);
   } catch (error) {
     res.status(500).json(error);

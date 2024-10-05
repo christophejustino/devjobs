@@ -3,19 +3,80 @@ import Card from "./components/Card";
 import SearchItem from "./components/SearchItem";
 import Title from "./components/Title";
 import Modal from "./components/Modal";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button } from "./components/ui/button";
 import { DarkModeContext } from "./context/DarkModeContext";
 import clsx from "clsx";
+
+
+interface JobWithCompany {
+  jobId: string;
+  title: string;
+  description: string;
+  jobType: Type;
+  image: string;
+  location: {
+    locationId: string;
+    country: string;
+  };
+  postedDate: Date;
+  requirements: string[];
+  responsibilities: string[];
+  company: {
+    companyId: string;
+    name: string;
+  };
+}
+
+enum Type {
+  FULL_TIME = "FULL_TIME",
+  PART_TIME = "PART_TIME",
+}
 
 const App = () => {
   const [toggleModal, setToggleModal] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const { darkMode } = useContext(DarkModeContext);
+  const [data, setData] = useState<JobWithCompany[]>([]);
+  const [filteredData, setFilteredData] = useState<JobWithCompany[]>([]);
+  const [filters, setFilters] = useState({ title: "", location: "" });
+  const [selectedJobTypes, setSelectedJobTypes] = useState<Type[]>([]);
+
+  useEffect(() => {
+    const getJob = async () => {
+      const res = await fetch("http://localhost:4000/api/jobs");
+      const jobs = await res.json();
+
+      const formattedJobs = jobs.map((job: any) => ({
+        ...job,
+        jobType: Type[job.jobType as keyof typeof Type],
+        postedDate: new Date(job.postedDate),
+      }));
+
+      setData(formattedJobs);
+      setFilteredData(formattedJobs); 
+    };
+    getJob();
+  }, []);
 
   const handleToggleModal = () => {
     setToggleModal(!toggleModal);
   };
+
+  const handleFilterChange = (title: string, location: string, jobTypes: Type[]) => {
+    setFilters({ title, location });
+    setSelectedJobTypes(jobTypes);
+  };
+
+  useEffect(() => {
+    const filtered = data.filter(
+      (job) =>
+        job.title.toLowerCase().includes(filters.title.toLowerCase()) &&
+        job.location.country.toLowerCase().includes(filters.location.toLowerCase()) &&
+        (selectedJobTypes.length === 0 || selectedJobTypes.includes(job.jobType))
+    );
+    setFilteredData(filtered);
+  }, [filters, data, selectedJobTypes]);
 
   return (
     <main
@@ -24,12 +85,19 @@ const App = () => {
         darkMode ? "bg-slate-700" : "bg-slate-100"
       )}
     >
-      <div className=" w-full space-y-8 md:py-6 py-4">
+      <div className="w-full space-y-8 md:py-6 py-4">
         <div>
           <Title />
         </div>
         <div>
-          <SearchItem setOpenModal={setOpenModal} openModal={openModal} />
+          <SearchItem
+            setOpenModal={setOpenModal}
+            openModal={openModal}
+            onFilterChange={handleFilterChange}
+            title={filters.title}
+            location={{ country: filters.location }}
+            jobType={selectedJobTypes}
+          />
         </div>
         <div
           onClick={handleToggleModal}
@@ -40,7 +108,7 @@ const App = () => {
         >
           <div
             className={clsx(
-              "size-8 rounded-full  flex items-center justify-center",
+              "size-8 rounded-full flex items-center justify-center",
               darkMode ? "bg-purple-400" : "bg-rose-300"
             )}
           >
@@ -50,15 +118,13 @@ const App = () => {
 
         <div className="flex items-center justify-center w-full xl:py-12 md:py-14 lg:py-14 py-8">
           <div className="grid w-full grid-cols-1 md:grid-cols-[1fr,1fr] lg:grid-cols-[1fr,1fr,1fr] lg:gap-x-12 xl:grid-cols-3 gap-x-4 gap-y-12">
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
-            <Card />
+            {filteredData.map((item) => ( 
+              <Card key={item.jobId} job={item} />
+            ))}
           </div>
         </div>
       </div>
+
       {toggleModal && (
         <div
           onClick={() => setToggleModal(!toggleModal)}
@@ -83,13 +149,14 @@ const App = () => {
           </Modal>
         </div>
       )}
+
       {openModal && (
         <div
           onClick={() => setOpenModal(!openModal)}
           className="fixed bg-black bottom-0 left-0 md:hidden cursor-pointer w-full h-full bg-opacity-50 flex items-center justify-center"
         >
           <Modal>
-            <div className=" divide-y space-y-6">
+            <div className="divide-y space-y-6">
               <div className="flex items-center space-x-4 px-2">
                 <img src="desktop/icon-location.svg" alt="" />
                 <input

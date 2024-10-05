@@ -1,15 +1,60 @@
 import { SearchIcon } from "lucide-react";
 import { Button } from "./ui/button";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { DarkModeContext } from "@/context/DarkModeContext";
 import clsx from "clsx";
+
+enum Type {
+  FULL_TIME = "FULL_TIME",
+  PART_TIME = "PART_TIME",
+}
 
 interface Props {
   setOpenModal: (open: boolean) => void;
   openModal: boolean;
+  location: {
+    country: string;
+  };
+  title: string;
+  jobType: Type[];
+  onFilterChange: (title: string, location: string,  jobTypes: Type[]) => void;
 }
-const SearchItem = ({ openModal, setOpenModal }: Props) => {
+const SearchItem = ({
+  setOpenModal,
+  openModal,
+  location,
+  title,
+  jobType,
+  onFilterChange,
+}: Props) => {
   const { darkMode } = useContext(DarkModeContext);
+  const [titleFilter, setTitleFilter] = useState(title);
+  const [locationFilter, setLocationFilter] = useState(location.country);
+  const [selectedJobTypes, setSelectedJobTypes] = useState<Type[]>(jobType);
+
+  const handleTitleFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTitleFilter = e.target.value;
+    setTitleFilter(newTitleFilter);
+    onFilterChange(newTitleFilter, locationFilter,selectedJobTypes);
+  };
+  const handleLocationFilter = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newLocationFilter = e.target.value;
+    setLocationFilter(newLocationFilter);
+    onFilterChange(titleFilter, newLocationFilter,selectedJobTypes);
+  };
+  const toggleJobType = (jobType: Type) => {
+    setSelectedJobTypes((prev) => {
+      // Mettez à jour l'état avec les types de travail sélectionnés
+      const updatedJobTypes = prev.includes(jobType)
+        ? prev.filter((type) => type !== jobType)
+        : [...prev, jobType];
+  
+      // Appeler onFilterChange pour mettre à jour les filtres dans le parent
+      onFilterChange(titleFilter, locationFilter, updatedJobTypes);
+      return updatedJobTypes; // Retourner l'état mis à jour
+    });
+  };
+
   return (
     <div className="md:pt-3 pt-5 relative">
       <div
@@ -26,9 +71,11 @@ const SearchItem = ({ openModal, setOpenModal }: Props) => {
           />
           <input
             type="text"
+            value={titleFilter}
+            onChange={handleTitleFilter}
             className={clsx(
               "md:placeholder:text-sm placeholder:text-xs placeholder:text-slate-400 w-[70%] xl:w-[70%] lg:w-[90%] md:w-[90%] h-[39px] outline-none p-2",
-              darkMode ? "bg-slate-800" : ""
+              darkMode ? "bg-slate-800 text-slate-400" : ""
             )}
             placeholder="Filter by title, companies, expertise..."
           />
@@ -54,9 +101,11 @@ const SearchItem = ({ openModal, setOpenModal }: Props) => {
             <img src="desktop/icon-location.svg" alt="" />
             <input
               type="text"
+              value={locationFilter}
+              onChange={handleLocationFilter}
               className={clsx(
-                "placeholder:text-sm  placeholder:text-slate-400 h-[39px] outline-none p-2",
-                darkMode ? "bg-slate-800" : ""
+                "placeholder:text-sm  placeholder:text-slate-400 h-[39px]  outline-none p-2",
+                darkMode ? "bg-slate-800 text-slate-400" : ""
               )}
               placeholder="Filter by location..."
             />
@@ -72,7 +121,12 @@ const SearchItem = ({ openModal, setOpenModal }: Props) => {
           <div className=" w-[100%]">
             <div className="flex items-center lg:space-x-6 space-x-1 w-full">
               <div className="flex items-center space-x-3 xl:space-x-4 xl:px-6 w-[100%]">
-                <input type="checkbox" className=" cursor-pointer size-5" />
+              <input
+                  type="checkbox"
+                  checked={selectedJobTypes.includes(Type.FULL_TIME)}
+                  onChange={() => toggleJobType(Type.FULL_TIME)}
+                  className="cursor-pointer"
+                />
                 <p
                   className={clsx(
                     "text-sm font-semibold lg:block xl:block md:hidden hidden",
