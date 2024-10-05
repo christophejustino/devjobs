@@ -8,7 +8,6 @@ import { Button } from "./components/ui/button";
 import { DarkModeContext } from "./context/DarkModeContext";
 import clsx from "clsx";
 
-
 interface JobWithCompany {
   jobId: string;
   title: string;
@@ -41,6 +40,7 @@ const App = () => {
   const [filteredData, setFilteredData] = useState<JobWithCompany[]>([]);
   const [filters, setFilters] = useState({ title: "", location: "" });
   const [selectedJobTypes, setSelectedJobTypes] = useState<Type[]>([]);
+  const [affiche, setAffiche] = useState(6);
 
   useEffect(() => {
     const getJob = async () => {
@@ -54,7 +54,7 @@ const App = () => {
       }));
 
       setData(formattedJobs);
-      setFilteredData(formattedJobs); 
+      setFilteredData(formattedJobs);
     };
     getJob();
   }, []);
@@ -63,7 +63,11 @@ const App = () => {
     setToggleModal(!toggleModal);
   };
 
-  const handleFilterChange = (title: string, location: string, jobTypes: Type[]) => {
+  const handleFilterChange = (
+    title: string,
+    location: string,
+    jobTypes: Type[]
+  ) => {
     setFilters({ title, location });
     setSelectedJobTypes(jobTypes);
   };
@@ -72,11 +76,18 @@ const App = () => {
     const filtered = data.filter(
       (job) =>
         job.title.toLowerCase().includes(filters.title.toLowerCase()) &&
-        job.location.country.toLowerCase().includes(filters.location.toLowerCase()) &&
-        (selectedJobTypes.length === 0 || selectedJobTypes.includes(job.jobType))
+        job.location.country
+          .toLowerCase()
+          .includes(filters.location.toLowerCase()) &&
+        (selectedJobTypes.length === 0 ||
+          selectedJobTypes.includes(job.jobType))
     );
     setFilteredData(filtered);
   }, [filters, data, selectedJobTypes]);
+
+  const handleAfficheCard = () => {
+    setAffiche((prev) => prev + 3);
+  };
 
   return (
     <main
@@ -118,10 +129,16 @@ const App = () => {
 
         <div className="flex items-center justify-center w-full xl:py-12 md:py-14 lg:py-14 py-8">
           <div className="grid w-full grid-cols-1 md:grid-cols-[1fr,1fr] lg:grid-cols-[1fr,1fr,1fr] lg:gap-x-12 xl:grid-cols-3 gap-x-4 gap-y-12">
-            {filteredData.map((item) => ( 
+            {filteredData.slice(0, affiche).map((item) => (
               <Card key={item.jobId} job={item} />
             ))}
           </div>
+        </div>
+        <div
+          onClick={handleAfficheCard}
+          className="flex items-center justify-center"
+        >
+          <Button className="bg-blue-700 hover:bg-blue-500">Learn More</Button>
         </div>
       </div>
 
