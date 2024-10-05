@@ -138,7 +138,7 @@ const App = () => {
           onClick={handleAfficheCard}
           className="flex items-center justify-center"
         >
-          <Button className="bg-blue-700 hover:bg-blue-500">Learn More</Button>
+          <Button className="bg-blue-700 hover:bg-blue-500 hover:scale-105">Learn More</Button>
         </div>
       </div>
 

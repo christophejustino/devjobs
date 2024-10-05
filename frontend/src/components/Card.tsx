@@ -3,6 +3,11 @@ import clsx from "clsx";
 import { motion } from "framer-motion";
 import { useContext } from "react";
 import { formatDistanceToNow } from "date-fns";
+import TimeAgo from "react-time-ago";
+import en from "javascript-time-ago/locale/en";
+
+import TimeAgoLibrary from "javascript-time-ago";
+TimeAgoLibrary.addDefaultLocale(en);
 
 interface JobWithCompany {
   jobId: string;
@@ -39,13 +44,7 @@ interface CardProps {
 
 const Card = ({ job }: CardProps) => {
   const { darkMode } = useContext(DarkModeContext);
-  const timeAgo = formatDistanceToNow(new Date(job.postedDate), { addSuffix: true });
-  
-  const formattedDate = new Intl.DateTimeFormat("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  }).format(job.postedDate);
+  const timeAgo = formatDistanceToNow(new Date(job.postedDate));
 
   return (
     <motion.div
@@ -60,9 +59,14 @@ const Card = ({ job }: CardProps) => {
     >
       <div className="flex flex-col space-y-3">
         <div className="flex items-center space-x-3">
-          <span className="text-sm text-slate-400">{timeAgo}</span>
+          <span className="text-sm text-slate-400">
+            <TimeAgo date={new Date(job.postedDate)} />
+          </span>
           <div className="size-1.5 rounded-full bg-slate-500"></div>
-          <span className="text-sm text-slate-400"> {job.jobType === "FULL_TIME" ? "Full Time" : "Part Time"} </span>
+          <span className="text-sm text-slate-400">
+            {" "}
+            {job.jobType === "FULL_TIME" ? "Full Time" : "Part Time"}{" "}
+          </span>
         </div>
         <strong
           className={clsx("cursor-pointer", darkMode ? "text-white" : "")}
